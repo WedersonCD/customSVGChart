@@ -6,18 +6,35 @@ define([
 ],
     function ($, props, svgTemplate, qlik) {
 
-        async function getSVGTemplate(layout){
+        async function getSVGTemplate(layout) {
             return await $.get(layout.svg.url);
         }
 
 
-        async function getSVGTrated(layout){
+        async function getSVGTrated(layout) {
 
             svgTemplate = await getSVGTemplate(layout);
 
-            
+            console.log(svgTemplate)
+
 
         }
+
+        function getDIVSVGContainerID(layout){
+            return 'div-svg-container-'+layout.qInfo.qId;
+        }
+
+        function getDivSVGContainer(layout) {
+            divId = getDIVSVGContainerID(layout);
+
+
+            return $("<div>").addClass(divId).css({
+                width: "100%",
+                height: "100%"
+            });
+
+        }
+
 
         return {
 
@@ -33,12 +50,11 @@ define([
             },
             definition: props,
             support: { snapshot: true, export: true, exportData: true },
-            paint: function async ($element, layout) {
-                
+            paint: function async($element, layout) {
 
 
-
-
+                svgContent = getSVGTrated(layout)
+                /*
                 var lista_valores = [];
                 var lista_label = ['Meta Fluxo', 'Meta Conversão', 'Meta PA', 'Meta PM', 'Total Meta', 'Real Fluxo', 'Real Conversão', 'Real PA', 'Real PM', 'Total Real', 'Var Fluxo', 'Var Conversao', 'Var PA', 'Var PM', 'Var Total'];
 
@@ -84,11 +100,11 @@ define([
 
                     }
                 })
-
+                */
 
 
                 $svgContainer.html(svgContent);
-                
+
                 $element.html($svgContainer);
 
                 // Define a largura e altura do contêiner SVG como 100% para torná-lo responsivo
