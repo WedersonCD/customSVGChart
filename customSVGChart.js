@@ -6,6 +6,19 @@ define([
 ],
     function ($, props, svgTemplate, qlik) {
 
+        async function getSVGTemplate(layout){
+            return await $.get(layout.svg.url);
+        }
+
+
+        async function getSVGTrated(layout){
+
+            svgTemplate = await getSVGTemplate(layout);
+
+            
+
+        }
+
         return {
 
             initialProperties: {
@@ -20,7 +33,10 @@ define([
             },
             definition: props,
             support: { snapshot: true, export: true, exportData: true },
-            paint: function ($element, layout) {
+            paint: function async ($element, layout) {
+                
+
+
 
 
                 var lista_valores = [];
@@ -69,16 +85,13 @@ define([
                     }
                 })
 
-                var $svgContainer = $("<div>").addClass("svg-container");
+
 
                 $svgContainer.html(svgContent);
+                
                 $element.html($svgContainer);
 
                 // Define a largura e altura do contêiner SVG como 100% para torná-lo responsivo
-                $svgContainer.css({
-                    width: "100%",
-                    height: "100%"
-                });
 
                 // Ajuste o atributo viewBox do SVG para permitir o redimensionamento proporcional
 

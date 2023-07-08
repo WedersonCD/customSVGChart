@@ -13,8 +13,8 @@ define([], function () {
             svg:    {
                 svgImage: {
                     type: "string",
-                    ref: "svg.link",
-                    label: "SVG Link",
+                    ref: "svg.url",
+                    label: "SVG url",
                     defaultValue: './content/SVG_Template.svg',
                     expression: "optional"
                 }
