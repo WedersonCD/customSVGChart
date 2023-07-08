@@ -7,21 +7,41 @@ define([
     function ($, props, svgTemplate, qlik) {
 
         async function getSVGTemplate(layout) {
-            return await $.get(layout.svg.url);
+            svgPage = await $.get(layout.svg.url);
+            
+            return svgPage.slice(svgPage.indexOf('<svg>'),svgPage.indexOf('</svg>'))
         }
 
 
         async function getSVGTrated(layout) {
 
-            svgTemplate = await getSVGTemplate(layout);
 
-            console.log(svgTemplate)
-
+            return svgTemplate;
 
         }
 
         function getDIVSVGContainerID(layout){
             return 'div-svg-container-'+layout.qInfo.qId;
+        }
+
+        function getFromToList(layout){
+            qHyperCube  = layout.qHyperCube;
+            qtdMeasures = qHyperCube.qSize.qcx;
+
+            var fromToList=[]
+            for(measureNumber=0;measureNumber<qtdMeasures;measureNumber++){
+
+                fromToObject ={
+                    'from':qHyperCube.qMeasureInfo[measureNumber].placeHolder.value,
+                    'to':qHyperCube.qGrandTotalRow[measureNumber].qText
+                }
+
+                fromToList.push(fromToObject)
+
+            }
+
+            return fromToList
+
         }
 
         function getDivSVGContainer(layout) {
@@ -50,10 +70,14 @@ define([
             },
             definition: props,
             support: { snapshot: true, export: true, exportData: true },
-            paint: function async($element, layout) {
+            paint: async function ($element, layout) {
 
-
-                svgContent = getSVGTrated(layout)
+                console.log(layout);
+                svgTemplate = await getSVGTemplate(layout);
+                FromToList = getFromToList(layout);
+                svgContent = await getSVGTrated(layout);
+                console.log('svgContent: ',svgContent)
+                
                 /*
                 var lista_valores = [];
                 var lista_label = ['Meta Fluxo', 'Meta Conversão', 'Meta PA', 'Meta PM', 'Total Meta', 'Real Fluxo', 'Real Conversão', 'Real PA', 'Real PM', 'Total Real', 'Var Fluxo', 'Var Conversao', 'Var PA', 'Var PM', 'Var Total'];
