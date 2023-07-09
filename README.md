@@ -8,10 +8,12 @@ See the changes [here](https://github.com/WedersonCD/customSVGChart/blob/main/CH
 
 ------------
 ![](https://github.com/WedersonCD/customSVGChart/blob/main/SVG%20Template%20Samples/3_sample_image.png?raw=true)
-
+![](https://github.com/WedersonCD/customSVGChart/blob/main/SVG%20Template%20Samples/second_sample_image.png?raw=true)
+![](https://github.com/WedersonCD/customSVGChart/blob/main/SVG%20Template%20Samples/first_sample_image.png?raw=true)
 
 
 ### How the extensions works
 
+------------
 
 ### How to use
