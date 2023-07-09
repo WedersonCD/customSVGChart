@@ -7,9 +7,10 @@ define([
     function ($, props, svgTemplate, qlik) {
 
         async function getSVGTemplate(layout) {
-            svgPage = await fetch(layout.svg.url).then(response=>{return response.text()});
+            const response  = await fetch(layout.svg.url);
+            const svgPage   = await response.text();
             
-            return svgPage.slice(svgPage.indexOf('<svg>'),svgPage.indexOf('</svg>'))
+            return svgPage.slice(svgPage.indexOf('<svg'),svgPage.indexOf('</svg>'))+'</svg>'
         }
 
 
@@ -17,7 +18,7 @@ define([
             let svgTrated = svgTemplate;
 
             fromToList.forEach((fromToObject)=>{
-                svgTrated.replace(fromToObject.from, fromToObject.to)
+                svgTrated= svgTrated.replace(fromToObject.from, fromToObject.to)
 
             })
 
@@ -79,9 +80,7 @@ define([
 
                 console.log(layout);
                 let svgTemplate     =   await getSVGTemplate(layout);
-                console.log(svgTemplate)
                 let fromToList      =   getFromToList(layout);
-                console.log(fromToList)
                 let svgTrated       =   getSVGTrated(svgTemplate,fromToList);
                 console.log(svgTrated)
                 let $SVGContainerDiv =   getSVGContainerDiv(layout)
