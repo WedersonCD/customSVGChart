@@ -6,6 +6,8 @@ See the changes [here](https://github.com/WedersonCD/customSVGChart/blob/main/CH
 
 ### Samples
 
+------------
+![](https://github.com/WedersonCD/customSVGChart/blob/main/SVG%20Template%20Samples/3_sample_image.png?raw=true)
 
 
 
