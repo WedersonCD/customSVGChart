@@ -1,16 +1,51 @@
 define([
     'jquery',
     './properties',
-    'text!./SVG_Template.svg',
+    './svgTemplates',
     'qlik'
 ],
-    function ($, props, svgTemplate, qlik) {
+    function ($, props, svgTemplates, qlik) {
+
+        function getSVGInputMode(layout) {
+            if (!layout.svg || !layout.svg.inputMode) {
+                return svgTemplates.defaultInputMode
+            }
+
+            return layout.svg.inputMode
+        }
+
+        function normalizeSVGTemplate(svgText) {
+            if (!svgText) {
+                return ''
+            }
+
+            const svgStart = svgText.indexOf('<svg')
+            const svgEnd = svgText.indexOf('</svg>')
+
+            if (svgStart === -1 || svgEnd === -1) {
+                return svgText
+            }
+
+            return svgText.slice(svgStart, svgEnd) + '</svg>'
+        }
 
         async function getSVGTemplate(layout) {
-            const response  = await fetch(layout.svg.url);
-            const svgPage   = await response.text();
-            
-            return svgPage.slice(svgPage.indexOf('<svg'),svgPage.indexOf('</svg>'))+'</svg>'
+            const svg = layout.svg || {}
+            const inputMode = getSVGInputMode(layout)
+
+            if (inputMode === 'rawText') {
+                return normalizeSVGTemplate(svg.rawText)
+            }
+
+            if (inputMode === 'templateFolder') {
+                const templateId = svg.templateId || svgTemplates.defaultTemplateId
+                return normalizeSVGTemplate(svgTemplates.templateById[templateId])
+            }
+
+            const response = await fetch(svg.url)
+            const svgPage = await response.text()
+
+            return normalizeSVGTemplate(svgPage)
         }
 
 
@@ -31,13 +66,13 @@ define([
         }
 
         function getFromToList(layout){
-            qHyperCube  = layout.qHyperCube;
-            qtdMeasures = qHyperCube.qSize.qcx;
+            var qHyperCube = layout.qHyperCube;
+            var qtdMeasures = qHyperCube.qSize.qcx;
 
             var fromToList=[]
-            for(measureNumber=0;measureNumber<qtdMeasures;measureNumber++){
+            for(var measureNumber=0;measureNumber<qtdMeasures;measureNumber++){
 
-                fromToObject ={
+                var fromToObject ={
                     'from':qHyperCube.qMeasureInfo[measureNumber].placeHolder.value,
                     'to':qHyperCube.qGrandTotalRow[measureNumber].qText
                 }
@@ -51,7 +86,7 @@ define([
         }
 
         function getSVGContainerDiv(layout) {
-            divId = getSVGContainerDivID(layout);
+            var divId = getSVGContainerDivID(layout);
 
 
             return $("<div>").addClass(divId).css({
@@ -78,15 +113,11 @@ define([
             support: { snapshot: true, export: true, exportData: true },
             paint: async function ($element, layout) {
 
-                console.log(layout);
                 let svgTemplate     =   await getSVGTemplate(layout);
                 let fromToList      =   getFromToList(layout);
                 let svgTrated       =   getSVGTrated(svgTemplate,fromToList);
-                console.log(svgTrated)
                 let $SVGContainerDiv =   getSVGContainerDiv(layout)
-                console.log('37')
                 $SVGContainerDiv.html(svgTrated);
-                console.log('90')
                 $element.html($SVGContainerDiv);
 
             },
