@@ -58,4 +58,4 @@ The extension now supports 3 ways to provide the SVG template:
 
 ### Sugestions or Issues
 
-With you found some bug in the extesion or have some improve tip, pls open a Issues in github or send a e-mail to: wedersoncabral@gmail.com. 
+If you found some bug in the extesion or have some improve tip, pls open a Issues in github or send a e-mail to: wedersoncabral@gmail.com. 
